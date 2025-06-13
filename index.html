@@ -30,6 +30,13 @@
       backdrop-filter: blur(10px);
     }
 
+    #matchIdDisplay {
+      color: #4ecdc4;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
     .controls input {
       padding: 8px;
       margin: 5px;
@@ -250,6 +257,7 @@
 </head>
 <body>
   <div class="controls">
+    <div id="matchIdDisplay">Match ID: 734</div>
     <label>Match ID:</label>
     <input type="number" id="matchIdInput" value="734" placeholder="Match ID">
     <button onclick="updateMatch()">Load Match</button>
@@ -311,6 +319,25 @@
   </div>
 
   <script>
+    // Function to get URL parameters
+    function getUrlParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Initialize match ID from URL parameter or default
+    function initializeMatchId() {
+      const urlMatchId = getUrlParameter('matchId');
+      if (urlMatchId) {
+        MATCH_ID = parseInt(urlMatchId);
+        document.getElementById('matchIdInput').value = MATCH_ID;
+        document.getElementById('matchIdDisplay').textContent = `Match ID: ${MATCH_ID} (from URL)`;
+      } else {
+        MATCH_ID = 734; // Default fallback
+        document.getElementById('matchIdDisplay').textContent = `Match ID: ${MATCH_ID} (default)`;
+      }
+    }
+
     // Configuration - using the working endpoint from index.html
     let MATCH_ID = 734;
     const CLUB_ID = 862;
@@ -321,6 +348,7 @@
 
     // Initialize the application
     document.addEventListener('DOMContentLoaded', function() {
+      initializeMatchId(); // Initialize match ID from URL first
       loadMatchData();
       startAutoRefresh();
     });
